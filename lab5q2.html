@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Counting Button</title>
+<style>
+    #count {
+        font-size: 10px; 
+    }
+</style>
+</head>
+<body>
+
+<p id="count"> this i sthe parragraph it counts the clicks and is cuurently on 0</p>
+<button onclick="incrementCount()">Increment Count</button>
+
+<script>
+    let count = 0;
+    
+    function incrementCount() {
+        count++;
+        document.getElementById('count').innerText = 'this is the parragraph it counts the clicks and is cuurently on '+count;
+        document.getElementById('count').style.fontSize = count + '1.5px';
+    }
+</script>
+
+</body>
+</html>

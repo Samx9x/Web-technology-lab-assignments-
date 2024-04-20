@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shopping List</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #222;
+    color: #fff;
+  }
+  h1 {
+    text-align: center;
+  }
+  .quickAccess {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .quickAccess button {
+    width: 150px;
+    height: 40px;
+    background-color: #ff0066;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 10px;
+  }
+  .quickAccess button:hover {
+    background-color: #ff0044;
+    box-shadow: 0 0 10px #ff0044;
+  }
+  #inputItem {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    background-color: #444;
+    color: #fff;
+    border: 1px solid #666;
+  }
+  #addItemBtn {
+    width: 100%;
+    padding: 10px;
+    background-color: #ff0066;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  #addItemBtn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background-color: #ff0066;
+    transition: left 0.3s ease;
+    z-index: 1;
+  }
+  #addItemBtn:hover::before {
+    left: 100%;
+  }
+  #addItemBtn:hover {
+    box-shadow: 0 0 10px #ff0066;
+  }
+  #listItems {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  #listItems th,
+  #listItems td {
+    padding: 10px;
+    border-bottom: 1px solid #555;
+    text-align: left;
+  }
+  #listItems th {
+    background-color: #444;
+    color: #00ffff;
+  }
+  #listItems td {
+    background-color: #333;
+    color: #fff;
+  }
+  .deleteBtn {
+    background-color: #40e0d0;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .deleteBtn:hover {
+    background-color: #00cccc;
+    box-shadow: 0 0 10px #00cccc;
+  }
+</style>
+</head>
+<body>
+
+<h1>Shopping List</h1>
+
+<p>You have accessed this page <span id="visitCount">0</span> times.</p>
+
+<div class="quickAccess">
+  <h2>Dairy Products</h2>
+  <button onclick="addItem('Milk')">Milk</button>
+  <button onclick="addItem('Cheese')">Cheese</button>
+  <button onclick="addItem('Yogurt')">Yogurt</button>
+  <h2>Animal Products</h2>
+  <button onclick="addItem('Chicken breasts')">Chicken breasts</button>
+  <button onclick="addItem('Eggs')">Eggs</button>
+  <button onclick="addItem('Luncheon meat')">Luncheon meat</button>
+  <h2>Other Items</h2>
+  <button onclick="addItem('Bread')">Bread</button>
+  <button onclick="addItem('Pasta')">Pasta</button>
+  <button onclick="addItem('Rice')">Rice</button>
+</div>
+
+<input type="text" id="inputItem" placeholder="Enter item">
+<button id="addItemBtn">Add Item</button>
+
+<table id="listItems">
+  <thead>
+    <tr>
+      <th>Items</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<script>
+  // Function to get and increment visit count
+  function incrementVisitCount() {
+    var visitCount = localStorage.getItem('visitCount');
+    visitCount = visitCount ? parseInt(visitCount) + 1 : 1;
+    localStorage.setItem('visitCount', visitCount);
+    return visitCount;
+  }
+
+  // Update visit count display
+  function updateVisitCountDisplay() {
+    var visitCount = localStorage.getItem('visitCount') || 0;
+    document.getElementById('visitCount').textContent = visitCount;
+  }
+
+  // Model
+  var shoppingListModel = {
+    items: [],
+    addItem: function(item) {
+      this.items.push(item);
+      this.saveToLocalStorage();
+    },
+    removeItem: function(index) {
+      this.items.splice(index, 1);
+      this.saveToLocalStorage();
+    },
+    saveToLocalStorage: function() {
+      localStorage.setItem('shoppingListItems', JSON.stringify(this.items));
+    },
+    loadFromLocalStorage: function() {
+      var storedItems = localStorage.getItem('shoppingListItems');
+      if (storedItems) {
+        this.items = JSON.parse(storedItems);
+      }
+    }
+  };
+
+  // View
+  var shoppingListView = {
+    render: function() {
+      var list = document.querySelector("#listItems tbody");
+      list.innerHTML = '';
+      shoppingListModel.items.forEach(function(item, index) {
+        var row = document.createElement("tr");
+        
+        var itemNameCell = document.createElement("td");
+        itemNameCell.textContent = item;
+        row.appendChild(itemNameCell);
+        
+        var deleteBtnCell = document.createElement("td");
+        var deleteBtn = document.createElement("button");
+        deleteBtn.className = "deleteBtn";
+        deleteBtn.textContent = "Delete";
+        deleteBtn.addEventListener("click", function() {
+          shoppingListController.removeItem(index);
+        });
+        deleteBtnCell.appendChild(deleteBtn);
+        row.appendChild(deleteBtnCell);
+        
+        list.appendChild(row);
+      });
+    }
+  };
+
+  // Controller
+  var shoppingListController = {
+    addItem: function(item) {
+      shoppingListModel.addItem(item);
+      shoppingListView.render();
+    },
+    removeItem: function(index) {
+      shoppingListModel.removeItem(index);
+      shoppingListView.render();
+    }
+  };
+
+  function addItem() {
+    var newItem = document.getElementById("inputItem").value;
+    if (newItem.trim() !== "") {
+      shoppingListController.addItem(newItem);
+      document.getElementById("inputItem").value = "";
+    }
+  }
+
+  // Initial render
+  shoppingListModel.loadFromLocalStorage();
+  shoppingListView.render();
+
+  // Update visit count
+  var visitCount = incrementVisitCount();
+  updateVisitCountDisplay();
+</script>
+
+</body>
+</html>

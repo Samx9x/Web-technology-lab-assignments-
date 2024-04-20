@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+</head>
+<body>
+    <input type="text" id="input1" placeholder="Enter 1st number">
+    <input type="text" id="input2" placeholder="Enter 2nd number">
+    <br>
+    <button onclick="oper('+')">+</button>
+    <button onclick="oper('-')">-</button>
+    <button onclick="oper('*')">*</button>
+    <button onclick="oper('/')">/</button>
+    <br>
+    <p id="result"></p>
+
+    <script>
+        function oper(operator) {
+            const input1 = document.getElementById("input1").value;
+            const input2 = document.getElementById("input2").value;
+
+            // Convert input values to integers
+            const value1 = Number.parseInt(input1);
+            const value2 = Number.parseInt(input2);
+
+            let result;
+            switch (operator) {
+                case '+':
+                    result = value1 + value2;
+                    break;
+                case '-':
+                    result = value1 - value2;
+                    break;
+                case '*':
+                    result = value1 * value2;
+                    break;
+                case '/':
+                    result = value1 / value2;
+                    break;
+                default:
+                    result = "Invalid operator";
+            }
+
+            document.getElementById("result").textContent = `Result: ${result}`;
+        }
+    </script>
+</body>
+</html>

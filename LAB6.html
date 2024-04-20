@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shopping List</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+  }
+  h1 {
+    text-align: center;
+  }
+  #inputItem {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+  }
+  #addItemBtn {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  #listItems {
+    list-style-type: none;
+    padding: 0;
+  }
+  .item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  .item:last-child {
+    border-bottom: none;
+  }
+  .deleteBtn {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    float: right;
+  }
+</style>
+</head>
+<body>
+
+<h1>Shopping List</h1>
+
+<input type="text" id="inputItem" placeholder="Enter item">
+<button id="addItemBtn">Add Item</button>
+
+<ul id="listItems"></ul>
+
+<script>
+  // Model
+  var shoppingListModel = {
+    items: [],
+    addItem: function(item) {
+      this.items.push(item);
+    },
+    removeItem: function(index) {
+      this.items.splice(index, 1);
+    }
+  };
+
+
+  var shoppingListView = {
+    render: function() {
+      var list = document.getElementById("listItems");
+      list.innerHTML = '';
+      shoppingListModel.items.forEach(function(item, index) {
+        var listItem = document.createElement("li");
+        listItem.className = "item";
+        listItem.textContent = item;
+        
+        var deleteBtn = document.createElement("button");
+        deleteBtn.className = "deleteBtn";
+        deleteBtn.textContent = "Delete";
+        deleteBtn.addEventListener("click", function() {
+          shoppingListController.removeItem(index);
+        });
+
+        listItem.appendChild(deleteBtn);
+        list.appendChild(listItem);
+      });
+    }
+  };
+
+
+  var shoppingListController = {
+    addItem: function() {
+      var newItem = document.getElementById("inputItem").value;
+      if (newItem.trim() !== '') {
+        shoppingListModel.addItem(newItem);
+        shoppingListView.render();
+        document.getElementById("inputItem").value = '';
+      }
+    },
+    removeItem: function(index) {
+      shoppingListModel.removeItem(index);
+      shoppingListView.render();
+    }
+  };
+
+  document.getElementById("addItemBtn").addEventListener("click", function() {
+    shoppingListController.addItem();
+  });
+
+
+  shoppingListView.render();
+</script>
+
+</body>
+</html>

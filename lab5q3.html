@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Counting Button with List</title>
+<style>
+    #count {
+        font-size: 10px;
+    }
+</style>
+</head>
+<body>
+
+<ul id="countList">
+</ul>
+<button onclick="incrementCount()">Increment Count</button>
+
+<script>
+    let count = 0;
+    const countList = document.getElementById('countList');
+    
+    function incrementCount() {
+        count++;
+        const newItem = document.createElement('li');
+        newItem.innerText = 'this is the parragraph it counts the clicks and is cuurently on '+count;
+        newItem.style.fontSize = count + '1.5px';
+        countList.appendChild(newItem);
+    }
+</script>
+
+</body>
+</html>

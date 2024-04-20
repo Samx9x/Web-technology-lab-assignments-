@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    #txt {
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .spin {
+      animation: spin 1.5s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+  <title>Word Spinner</title>
+</head>
+<body>
+
+  <h2 id="txt">Hello!!!</h2>
+  <input type="text" id="Input" placeholder="Enter a new word to spin">
+  <button onclick="changeText()">Change and Spin</button>
+
+  <script>
+    function changeText() {
+      const inputElement = document.getElementById('Input');
+      const outputElement = document.getElementById('txt');
+      const inputValue = inputElement.value.trim();
+      if (inputValue !== '') {
+        outputElement.textContent = inputValue;
+        outputElement.classList.add('spin');
+        setTimeout(() => {
+          outputElement.classList.remove('spin');
+        }, 3000); 
+      }
+    }
+  </script>
+</body>
+</html>
+
